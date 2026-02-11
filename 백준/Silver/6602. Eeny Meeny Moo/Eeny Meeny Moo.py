@@ -10,9 +10,12 @@ def get_shutdown_order_array(length, m):
 
     index = 0
     while True:
-        already_shutdowned.add(array[index])
-        copied_array.remove(array[index])
-        answer.append(array[index])
+        target = array[index]
+        if target == 2 and len(copied_array) > 1:
+            return False, []
+        already_shutdowned.add(target)
+        copied_array.remove(target)
+        answer.append(target)
         if not copied_array:
             break
         index = (index + m)
@@ -20,14 +23,15 @@ def get_shutdown_order_array(length, m):
             while index >= len(array):
                 array.extend(copied_array)
 
-    return answer
+    return True, answer
 
 
 def solution(length):
     m = 1
     while True:
-        ordered_array = get_shutdown_order_array(length, m)
-        if ordered_array[-1] == 2:
+        success, ordered_array = get_shutdown_order_array(length, m)
+        # print(success, ordered_array)
+        if success and ordered_array[-1] == 2:
             break
         m += 1
     return m
